@@ -125,14 +125,14 @@ def FCN8( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	# print(img_input.shape)
 	# print(upscore.shape)
 	# exit(0)
-	# o = CrfRnnLayer(image_dims=(input_height, input_width),
-    #                      num_classes=nClasses,
-    #                      theta_alpha=160.,
-    #                      theta_beta=3.,
-    #                      theta_gamma=3.,
-    #                      num_iterations=10,
-    #                      name='crfrnn')([upscore, Permute((2,3,1))(img_input)])
-	# o = Permute((3,1,2))(o)
+	o = CrfRnnLayer(image_dims=(input_height, input_width),
+                         num_classes=nClasses,
+                         theta_alpha=160.,
+                         theta_beta=3.,
+                         theta_gamma=3.,
+                         num_iterations=10,
+                         name='crfrnn')([upscore, Permute((2,3,1))(img_input)])
+	o = Permute((3,1,2))(o)
 
 	o_shape = Model(img_input ,  o).output_shape
 	# print(o_shape)
