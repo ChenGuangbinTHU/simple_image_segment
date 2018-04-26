@@ -91,6 +91,21 @@ def load_label(img_path):
 	return label
 '''
 
+def get__x_and_y(img_path, seg_path, n_classes, input_height, input_width):
+    assert img_path[-1] == '/'
+	assert seg_path[-1] == '/'
+	x = []
+	y = []
+	images = glob.glob( images_path + "*.jpg"  ) + glob.glob( images_path + "*.png"  ) +  glob.glob( images_path + "*.jpeg"  )
+	images.sort()
+	segmentations  = glob.glob( segs_path + "*.jpg"  ) + glob.glob( segs_path + "*.png"  ) +  glob.glob( segs_path + "*.jpeg"  )
+	segmentations.sort()
+	assert len( images ) == len(segmentations)
+	for img, seg in enumerate(images, segmentations):
+    	x.append( getImageArr(im , input_width , input_height )  )
+		y.append( getSegmentationArr( seg , n_classes , output_width , output_height )  )
+    return x, y
+
 def imageSegmentationGenerator( images_path , segs_path ,  batch_size,  n_classes , input_height , input_width , output_height , output_width   ):
 	
 	assert images_path[-1] == '/'
