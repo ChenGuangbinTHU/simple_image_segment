@@ -4,6 +4,7 @@ import cv2
 import glob
 import itertools
 import random
+import pickle
 
 
 def getImageArr( path , width , height , imgNorm="sub_mean" , odering='channels_first' ):
@@ -91,20 +92,31 @@ def load_label(img_path):
 	return label
 '''
 
-def get__x_and_y(img_path, seg_path, n_classes, input_height, input_width):
-    assert img_path[-1] == '/'
+def get_x_and_y(img_path, seg_path, exp_path, n_classes, input_height, input_width):
+	assert img_path[-1] == '/'
 	assert seg_path[-1] == '/'
+	# assert exp_path[-1] == '/'
 	x = []
 	y = []
-	images = glob.glob( images_path + "*.jpg"  ) + glob.glob( images_path + "*.png"  ) +  glob.glob( images_path + "*.jpeg"  )
+	y_exception = []
+	
+	f = open(exp_path, 'rb')
+	exp = pickle.load(f)
+	images = glob.glob( img_path + "*.jpg"  ) + glob.glob(img_path +  "*.png"  ) +  glob.glob( img_path + "*.jpeg"  )
 	images.sort()
-	segmentations  = glob.glob( segs_path + "*.jpg"  ) + glob.glob( segs_path + "*.png"  ) +  glob.glob( segs_path + "*.jpeg"  )
+	segmentations  = glob.glob( seg_path + "*.jpg"  ) + glob.glob( seg_path + "*.png"  ) +  glob.glob( seg_path + "*.jpeg"  )
 	segmentations.sort()
 	assert len( images ) == len(segmentations)
-	for img, seg in enumerate(images, segmentations):
-    	x.append( getImageArr(im , input_width , input_height )  )
-		y.append( getSegmentationArr( seg , n_classes , output_width , output_height )  )
-    return x, y
+	
+	for img, seg in zip(images, segmentations):
+		# print(img)
+		x.append( getImageArr(img , input_width , input_height )  )
+		# y.append( getSegmentationArr( seg , n_classes , output_width , output_height )  )
+		y_exception.append(exp[img.split('/')[1]])
+	print(x)
+	print(y_exception)
+	exit(0)
+	return x, y
 
 def imageSegmentationGenerator( images_path , segs_path ,  batch_size,  n_classes , input_height , input_width , output_height , output_width   ):
 	
@@ -151,4 +163,5 @@ def imageSegmentationGenerator( images_path , segs_path ,  batch_size,  n_classe
 # m = Models.VGGSegnet.VGGSegnet( 10  , use_vgg_weights=True ,  optimizer='adadelta' , input_image_size=( 800 , 550 )  )
 # m.fit_generator( G , 512  , nb_epoch=10 )
 
-
+if __name__ == '__main__':
+	get_x_and_y('new_sheep_image/', 'new_sheep_seg/', 'exception_train', 2, 2, 2)

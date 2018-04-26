@@ -19,7 +19,7 @@ def main():
     f.close()
 
 if __name__ == '__main__':
-    main()
-    # f = open('exception_train', 'rb')
-    # a = pickle.load(f)
-    # print(a)
+    # main()
+    f = open('exception_val', 'rb')
+    a = pickle.load(f)
+    print(a)
