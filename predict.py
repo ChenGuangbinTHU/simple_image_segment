@@ -32,7 +32,7 @@ print('666')
 # modelFns = { 'vgg_segnet':Models.VGGSegnet.VGGSegnet , 'vgg_unet':Models.VGGUnet.VGGUnet , 'vgg_unet2':Models.VGGUnet.VGGUnet2 , 'fcn8':Models.FCN8.FCN8 , 'fcn32':Models.FCN32.FCN32   }
 modelFN = FCN8.FCN8
 
-m = modelFN( n_classes , input_height=input_height, input_width=input_width   )
+m, m_exp = modelFN( n_classes , input_height=input_height, input_width=input_width   )
 m.load_weights(  args.save_weights_path + "." + str(  epoch_number )  )
 # m.compile(loss='categorical_crossentropy',
 #       optimizer= 'adadelta' ,
