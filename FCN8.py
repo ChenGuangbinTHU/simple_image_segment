@@ -87,6 +87,8 @@ def FCN8( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	x = Flatten(name='flatten')(x)
 	x = Dense(4096, activation='relu', name='fc1')(x)
 	x = Dense(4096, activation='relu', name='fc2')(x)
+	x_exp = Dense(1, activation='sigmoid')
+	exp_model = Model(img_input, x_exp)
 	x = Dense( 1000 , activation='softmax', name='predictions')(x)
 
 	vgg  = Model(  img_input , x  )
@@ -150,7 +152,7 @@ def FCN8( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	model.outputWidth = outputWidth
 	model.outputHeight = outputHeight
 
-	return model
+	return model, exp_model
 
 
 

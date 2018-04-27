@@ -50,10 +50,12 @@ if validate:
 # modelFns = { 'vgg_segnet':Models.VGGSegnet.VGGSegnet , 'vgg_unet':Models.VGGUnet.VGGUnet , 'vgg_unet2':Models.VGGUnet.VGGUnet2 , 'fcn8':Models.FCN8.FCN8 , 'fcn32':Models.FCN32.FCN32   }
 modelFN = FCN8.FCN8
 
-m = modelFN( n_classes , input_height=input_height, input_width=input_width   )
+m, exp_m = modelFN( n_classes , input_height=input_height, input_width=input_width   )
 m.compile(loss='binary_crossentropy',
       optimizer= optimizer_name ,
       metrics=[ 'accuracy'])
+sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True) 
+exp_m.compile(loss='binary_crossentropy',optimizer=sgd,metrics=['accuracy'])
 
 
 if len( load_weights ) > 0:
@@ -67,12 +69,15 @@ output_width = m.outputWidth
 print(output_height)
 print(output_width)
 
-G  = LoadBatches.imageSegmentationGenerator( train_images_path , train_segs_path ,  train_batch_size,  n_classes , input_height , input_width , output_height , output_width   )
+
+train_x, train_y, train_y_exp = LoadBatches.get_x_and_y(train_images_path, train_segs_path, 'exception_train', n_classes, input_height, input_width,output_height, output_width)
+# G  = LoadBatches.imageSegmentationGenerator( train_images_path , train_segs_path ,  train_batch_size,  n_classes , input_height , input_width , output_height , output_width   )
 checkpoint = ModelCheckpoint(save_weights_path+'.0', monitor='val_acc', verbose=1, save_best_only=True,mode='max')
 callbacks_list = [checkpoint]
 
 if validate:
-	G2  = LoadBatches.imageSegmentationGenerator( val_images_path , val_segs_path ,  val_batch_size,  n_classes , input_height , input_width , output_height , output_width   )
+	val_x, val_y, val_y_exp = LoadBatches.get_x_and_y(val_images_path, val_segs_path, 'exception_val', n_classes, input_height, input_width,output_height, output_width))
+	# G2  = LoadBatches.imageSegmentationGenerator( val_images_path , val_segs_path ,  val_batch_size,  n_classes , input_height , input_width , output_height , output_width   )
 
 if not validate:
 	for ep in range( epochs ):
@@ -80,10 +85,10 @@ if not validate:
 		# m.save_weights( save_weights_path + "." + str( ep ) )
 		# m.save( save_weights_path + ".model." + str( ep ) )
 else:
-	for ep in range( epochs ):
-		print(ep)
-		m.fit_generator( G , 13  ,shuffle = False, validation_data=G2 , validation_steps=5 ,class_weight=[1.0, 1.0],  epochs=1, callbacks=callbacks_list )
-		
+	# for ep in range( epochs ):
+	# 	print(ep)
+		# m.fit_generator( G , 13  ,shuffle = False, validation_data=G2 , validation_steps=5 ,class_weight=[1.0, 1.0],  epochs=1, callbacks=callbacks_list )
+	m.fit(train_x, train_y, batch_size=26, epochs=100, validation_data=(val_x, val_y), callbacks=callbacks_list)
 		# m.save_weights( save_weights_path + "." + str( ep )  )
 		# m.save( save_weights_path + ".model." + str( ep ) )
 

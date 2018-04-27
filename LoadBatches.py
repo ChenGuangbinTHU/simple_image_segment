@@ -92,7 +92,7 @@ def load_label(img_path):
 	return label
 '''
 
-def get_x_and_y(img_path, seg_path, exp_path, n_classes, input_height, input_width):
+def get_x_and_y(img_path, seg_path, exp_path, n_classes, input_height, input_width, output_width, output_height):
 	assert img_path[-1] == '/'
 	assert seg_path[-1] == '/'
 	# assert exp_path[-1] == '/'
@@ -108,15 +108,22 @@ def get_x_and_y(img_path, seg_path, exp_path, n_classes, input_height, input_wid
 	segmentations.sort()
 	assert len( images ) == len(segmentations)
 	
+	index = [i for i in range(0, len(images))]
+	random.shuffle(index)
+	images = [images[i] for i in index]
+	segmentations = [segmentations[i] for i in index]
+	
 	for img, seg in zip(images, segmentations):
 		# print(img)
 		x.append( getImageArr(img , input_width , input_height )  )
-		# y.append( getSegmentationArr( seg , n_classes , output_width , output_height )  )
+		y.append( getSegmentationArr( seg , n_classes , output_width , output_height )  )
 		y_exception.append(exp[img.split('/')[1]])
-	print(x)
-	print(y_exception)
-	exit(0)
-	return x, y
+	# for i, j, k in zip(images, segmentations, y_exception):
+	# 	print(i, j, k)
+	# print(x)
+	# print(y_exception)
+	# exit(0)
+	return x, y, y_exception
 
 def imageSegmentationGenerator( images_path , segs_path ,  batch_size,  n_classes , input_height , input_width , output_height , output_width   ):
 	
@@ -164,4 +171,4 @@ def imageSegmentationGenerator( images_path , segs_path ,  batch_size,  n_classe
 # m.fit_generator( G , 512  , nb_epoch=10 )
 
 if __name__ == '__main__':
-	get_x_and_y('new_sheep_image/', 'new_sheep_seg/', 'exception_train', 2, 2, 2)
+	get_x_and_y('new_sheep_image/', 'new_sheep_seg/', 'exception_train', 2, 2, 2, 2, 2)
