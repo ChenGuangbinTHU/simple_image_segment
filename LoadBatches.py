@@ -5,7 +5,7 @@ import glob
 import itertools
 import random
 import pickle
-
+import keras
 
 def getImageArr( path , width , height , imgNorm="sub_mean" , odering='channels_first' ):
 
@@ -123,7 +123,7 @@ def get_x_and_y(img_path, seg_path, exp_path, n_classes, input_height, input_wid
 	# print(x)
 	# print(y_exception)
 	# exit(0)
-	return np.array(x), np.array(y), np.array(y_exception)
+	return np.array(x), np.array(y), keras.utils.to_categorical(np.array(y_exception), 2)
 
 def imageSegmentationGenerator( images_path , segs_path ,  batch_size,  n_classes , input_height , input_width , output_height , output_width   ):
 	

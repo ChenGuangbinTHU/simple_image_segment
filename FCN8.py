@@ -57,6 +57,9 @@ def FCN8( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	x = Conv2D(8, (3, 3), activation='relu', padding='same', name='block1_conv2', data_format=IMAGE_ORDERING )(x)
 	x = MaxPooling2D((2, 2), strides=(2, 2), name='block1_pool', data_format=IMAGE_ORDERING )(x)
 	f1 = x
+	x_exp = Flatten(name='f')(x)
+	x_exp = Dense(2)(x_exp)
+	x_exp = (Activation('softmax'))(x_exp)
 	# Block 2
 	x = Conv2D(16, (3, 3), activation='relu', padding='same', name='block2_conv1', data_format=IMAGE_ORDERING )(x)
 	x = Conv2D(16, (3, 3), activation='relu', padding='same', name='block2_conv2', data_format=IMAGE_ORDERING )(x)
@@ -85,9 +88,10 @@ def FCN8( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	f5 = x
 
 	x = Flatten(name='flatten')(x)
+	
 	x = Dense(4096, activation='relu', name='fc1')(x)
 	x = Dense(4096, activation='relu', name='fc2')(x)
-	x_exp = Dense(1, activation='sigmoid')(x)
+	
 	exp_model = Model(img_input, x_exp)
 	x = Dense( 1000 , activation='softmax', name='predictions')(x)
 
