@@ -117,7 +117,7 @@ def get_x_and_y(img_path, seg_path, exp_path, n_classes, input_height, input_wid
 		# print(img)
 		x.append( getImageArr(img , input_width , input_height )  )
 		y.append( getSegmentationArr( seg , n_classes , output_width , output_height )  )
-		y_exception.append(exp[img.split('/')[1]])
+		# y_exception.append(exp[img.split('/')[1]])
 	# for i, j, k in zip(images, segmentations, y_exception):
 	# 	print(i, j, k)
 	# print(x)

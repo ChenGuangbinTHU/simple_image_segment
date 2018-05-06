@@ -91,8 +91,8 @@ else:
 	# for ep in range( epochs ):
 	# 	print(ep)
 		# m.fit_generator( G , 13  ,shuffle = False, validation_data=G2 , validation_steps=5 ,class_weight=[1.0, 1.0],  epochs=1, callbacks=callbacks_list )
-	# m.fit(train_x, train_y, batch_size=10, epochs=100, validation_data=(val_x, val_y), callbacks=callbacks_list)
-	m_exp.fit(train_x, train_y_exp, batch_size=10, epochs=100, validation_data=(val_x, val_y_exp), callbacks=[checkpoint_exp])
+	m.fit(train_x, train_y, batch_size=10, epochs=100, validation_data=(val_x, val_y), callbacks=callbacks_list)
+	# m_exp.fit(train_x, train_y_exp, batch_size=10, epochs=100, validation_data=(val_x, val_y_exp), callbacks=[checkpoint_exp])
 		# m.save_weights( save_weights_path + "." + str( ep )  )
 		# m.save( save_weights_path + ".model." + str( ep ) )
 
