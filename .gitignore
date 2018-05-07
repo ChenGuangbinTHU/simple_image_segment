@@ -3,10 +3,7 @@ acc/
 data/
 image/
 Models/
-new_sheep_image/
-new_sheep_seg/
-new_sheep_val_image/
-new_sheep_val_seg/
+
 pre_sheep_seg/
 predict_source/
 predict_target/
