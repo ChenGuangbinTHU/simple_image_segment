@@ -11,7 +11,7 @@ def getImageArr( path , width , height , imgNorm="sub_mean" , odering='channels_
 
 	try:
 		img = cv2.imread(path, 1)
-
+		img = img[0:1080,400:1480]
 		if imgNorm == "sub_and_divide":
 			img = np.float32(cv2.resize(img, ( width , height ))) / 127.5 - 1
 		elif imgNorm == "sub_mean":
@@ -27,6 +27,7 @@ def getImageArr( path , width , height , imgNorm="sub_mean" , odering='channels_
 
 		if odering == 'channels_first':
 			img = np.rollaxis(img, 2, 0)
+		
 		return img
 	except Exception as e:
 		print (path , e)
@@ -44,6 +45,7 @@ def getSegmentationArr( path , nClasses ,  width , height  ):
 	seg_labels = np.zeros((  height , width  , nClasses ))
 	try:
 		img = cv2.imread(path, 1)
+		img = img[0:1080,400:1480]
 		img = cv2.resize(img, ( width , height ))
 		img = img[:, : , 0]
 

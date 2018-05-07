@@ -89,20 +89,20 @@ def FCN8( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 
 	x = Flatten(name='flatten')(x)
 	
-	x = Dense(4096, activation='relu', name='fc1')(x)
-	x = Dense(4096, activation='relu', name='fc2')(x)
+	x = Dense(512, activation='relu', name='fc1')(x)
+	x = Dense(512, activation='relu', name='fc2')(x)
 	
 	exp_model = Model(img_input, x_exp)
-	x = Dense( 1000 , activation='softmax', name='predictions')(x)
+	x = Dense( 125 , activation='softmax', name='predictions')(x)
 
 	vgg  = Model(  img_input , x  )
 	# vgg.load_weights(VGG_Weights_path)
 
 	o = f5
 
-	o = ( Conv2D( 4096 , ( 7 , 7 ) , activation='relu' , padding='same', data_format=IMAGE_ORDERING))(o)
+	o = ( Conv2D( 512 , ( 7 , 7 ) , activation='relu' , padding='same', data_format=IMAGE_ORDERING))(o)
 	o = Dropout(0.5)(o)
-	o = ( Conv2D( 4096 , ( 1 , 1 ) , activation='relu' , padding='same', data_format=IMAGE_ORDERING))(o)
+	o = ( Conv2D( 512 , ( 1 , 1 ) , activation='relu' , padding='same', data_format=IMAGE_ORDERING))(o)
 	o = Dropout(0.5)(o)
 
 	o = ( Conv2D( nClasses ,  ( 1 , 1 ) ,kernel_initializer='he_normal' , data_format=IMAGE_ORDERING))(o)
