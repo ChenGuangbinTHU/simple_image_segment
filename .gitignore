@@ -21,4 +21,5 @@ val_image/
 val_seg/
 val_seg_pre/
 w/
+result/
 .DS_Store
