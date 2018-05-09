@@ -13,6 +13,7 @@ def getImageArr( path , width , height , imgNorm="sub_mean" , odering='channels_
 	try:
 		img = cv2.imread(path, 1)
 		img = img[0:1080,400:1480]
+		img = cv2.resize(img, ( width , height ))
 		if imgNorm == "sub_and_divide":
 			img = np.float32(cv2.resize(img, ( width , height ))) / 127.5 - 1
 		elif imgNorm == "sub_mean":
