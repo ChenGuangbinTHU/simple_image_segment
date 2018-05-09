@@ -53,47 +53,47 @@ def FCN8( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	# https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg16_weights_th_dim_ordering_th_kernels.h5
 	img_input = Input(shape=(3,input_height,input_width))
 
-	x = Conv2D(8, (3, 3), activation='relu', padding='same', name='block1_conv1', data_format=IMAGE_ORDERING )(img_input)
-	x = Conv2D(8, (3, 3), activation='relu', padding='same', name='block1_conv2', data_format=IMAGE_ORDERING )(x)
+	x = Conv2D(16, (3, 3), activation='relu', padding='same', name='block1_conv1', data_format=IMAGE_ORDERING )(img_input)
+	x = Conv2D(16, (3, 3), activation='relu', padding='same', name='block1_conv2', data_format=IMAGE_ORDERING )(x)
 	x = MaxPooling2D((2, 2), strides=(2, 2), name='block1_pool', data_format=IMAGE_ORDERING )(x)
 	f1 = x
 	x_exp = Flatten(name='f')(x)
 	x_exp = Dense(2)(x_exp)
 	x_exp = (Activation('softmax'))(x_exp)
 	# Block 2
-	x = Conv2D(16, (3, 3), activation='relu', padding='same', name='block2_conv1', data_format=IMAGE_ORDERING )(x)
-	x = Conv2D(16, (3, 3), activation='relu', padding='same', name='block2_conv2', data_format=IMAGE_ORDERING )(x)
+	x = Conv2D(32, (3, 3), activation='relu', padding='same', name='block2_conv1', data_format=IMAGE_ORDERING )(x)
+	x = Conv2D(32, (3, 3), activation='relu', padding='same', name='block2_conv2', data_format=IMAGE_ORDERING )(x)
 	x = MaxPooling2D((2, 2), strides=(2, 2), name='block2_pool', data_format=IMAGE_ORDERING )(x)
 	f2 = x
 
 	# Block 3
-	x = Conv2D(32, (3, 3), activation='relu', padding='same', name='block3_conv1', data_format=IMAGE_ORDERING )(x)
-	x = Conv2D(32, (3, 3), activation='relu', padding='same', name='block3_conv2', data_format=IMAGE_ORDERING )(x)
-	x = Conv2D(32, (3, 3), activation='relu', padding='same', name='block3_conv3', data_format=IMAGE_ORDERING )(x)
+	x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block3_conv1', data_format=IMAGE_ORDERING )(x)
+	x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block3_conv2', data_format=IMAGE_ORDERING )(x)
+	x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block3_conv3', data_format=IMAGE_ORDERING )(x)
 	x = MaxPooling2D((2, 2), strides=(2, 2), name='block3_pool', data_format=IMAGE_ORDERING )(x)
 	f3 = x
 
 	# Block 4
-	x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block4_conv1', data_format=IMAGE_ORDERING )(x)
-	x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block4_conv2', data_format=IMAGE_ORDERING )(x)
-	x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block4_conv3', data_format=IMAGE_ORDERING )(x)
+	x = Conv2D(128, (3, 3), activation='relu', padding='same', name='block4_conv1', data_format=IMAGE_ORDERING )(x)
+	x = Conv2D(128, (3, 3), activation='relu', padding='same', name='block4_conv2', data_format=IMAGE_ORDERING )(x)
+	x = Conv2D(128, (3, 3), activation='relu', padding='same', name='block4_conv3', data_format=IMAGE_ORDERING )(x)
 	x = MaxPooling2D((2, 2), strides=(2, 2), name='block4_pool', data_format=IMAGE_ORDERING )(x)
 	f4 = x
 
 	# Block 5
-	x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block5_conv1', data_format=IMAGE_ORDERING )(x)
-	x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block5_conv2', data_format=IMAGE_ORDERING )(x)
-	x = Conv2D(64, (3, 3), activation='relu', padding='same', name='block5_conv3', data_format=IMAGE_ORDERING )(x)
+	x = Conv2D(128, (3, 3), activation='relu', padding='same', name='block5_conv1', data_format=IMAGE_ORDERING )(x)
+	x = Conv2D(128, (3, 3), activation='relu', padding='same', name='block5_conv2', data_format=IMAGE_ORDERING )(x)
+	x = Conv2D(128, (3, 3), activation='relu', padding='same', name='block5_conv3', data_format=IMAGE_ORDERING )(x)
 	x = MaxPooling2D((2, 2), strides=(2, 2), name='block5_pool', data_format=IMAGE_ORDERING )(x)
 	f5 = x
 
 	x = Flatten(name='flatten')(x)
 	
-	x = Dense(512, activation='relu', name='fc1')(x)
-	x = Dense(512, activation='relu', name='fc2')(x)
+	x = Dense(1024, activation='relu', name='fc1')(x)
+	x = Dense(1024, activation='relu', name='fc2')(x)
 	
 	exp_model = Model(img_input, x_exp)
-	x = Dense( 125 , activation='softmax', name='predictions')(x)
+	x = Dense( 250 , activation='softmax', name='predictions')(x)
 
 	vgg  = Model(  img_input , x  )
 	# vgg.load_weights(VGG_Weights_path)

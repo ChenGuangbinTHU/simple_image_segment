@@ -1,6 +1,7 @@
 import argparse
 import Models , LoadBatches
 import FCN8
+import numpy as np
 from keras.callbacks import ModelCheckpoint
 from keras import metrics
 
@@ -75,7 +76,6 @@ train_x, train_y, train_y_exp = LoadBatches.get_x_and_y(train_images_path, train
 checkpoint = ModelCheckpoint(save_weights_path+'.0', monitor='val_acc', verbose=1, save_best_only=True,mode='max')
 callbacks_list = [checkpoint]
 checkpoint_exp = ModelCheckpoint(save_weights_path+'exp', monitor='val_acc', verbose=1, save_best_only=True,mode='max')
-
 
 if validate:
 	val_x, val_y, val_y_exp = LoadBatches.get_x_and_y(val_images_path, val_segs_path, 'exception_val', n_classes, input_height, input_width,output_height, output_width)

@@ -12,13 +12,7 @@ def visulize(img, mask):
     mask = np.array(mask)[:,:,0]
     mask[mask < 250] = 0
     mask[mask >= 250] = 1
-    mask = Image.fromarray(mask)
     mask = np.lib.pad(mask, ((0,0),(400,shape[1]-shape[0]-400)), 'constant', constant_values=(0, 0))
-    # print(np.array(img).shape)
-    # print(np.array(mask).shape)
-    # img = np.array(img)[0:1080,400:1480]
-    # mask = np.array(mask)[:,:,0]
-    # img = Image.fromarray(img)
     mask = Image.fromarray(mask)
     mask_data = mask.getdata()
     a = img.getdata()

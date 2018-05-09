@@ -6,9 +6,10 @@ import itertools
 import random
 import pickle
 import keras
+from matplotlib import pyplot as plt
 
 def getImageArr( path , width , height , imgNorm="sub_mean" , odering='channels_first' ):
-
+	# print(path)
 	try:
 		img = cv2.imread(path, 1)
 		img = img[0:1080,400:1480]
@@ -27,7 +28,6 @@ def getImageArr( path , width , height , imgNorm="sub_mean" , odering='channels_
 
 		if odering == 'channels_first':
 			img = np.rollaxis(img, 2, 0)
-		
 		return img
 	except Exception as e:
 		print (path , e)
@@ -41,14 +41,15 @@ def getImageArr( path , width , height , imgNorm="sub_mean" , odering='channels_
 
 
 def getSegmentationArr( path , nClasses ,  width , height  ):
-
+	# print(path)
 	seg_labels = np.zeros((  height , width  , nClasses ))
 	try:
 		img = cv2.imread(path, 1)
+		
 		img = img[0:1080,400:1480]
+		
 		img = cv2.resize(img, ( width , height ))
 		img = img[:, : , 0]
-
 		for c in range(nClasses):
 			seg_labels[: , : , c ] = (img == c ).astype(int)
 
@@ -164,13 +165,38 @@ def imageSegmentationGenerator( images_path , segs_path ,  batch_size,  n_classe
 		# print(1)
 		yield np.array(X) , np.array(Y)
 
-
-# import Models , LoadBatches
-# G  = LoadBatches.imageSegmentationGenerator( "data/clothes_seg/prepped/images_prepped_train/" ,  "data/clothes_seg/prepped/annotations_prepped_train/" ,  1,  10 , 800 , 550 , 400 , 272   ) 
-# G2  = LoadBatches.imageSegmentationGenerator( "data/clothes_seg/prepped/images_prepped_test/" ,  "data/clothes_seg/prepped/annotations_prepped_test/" ,  1,  10 , 800 , 550 , 400 , 272   ) 
-
-# m = Models.VGGSegnet.VGGSegnet( 10  , use_vgg_weights=True ,  optimizer='adadelta' , input_image_size=( 800 , 550 )  )
-# m.fit_generator( G , 512  , nb_epoch=10 )
+def visulize(img, mask):
+		
+	# print(shape)
+	# mask = mask.resize((shape[0],shape[0]))
+	# mask = mask.reshape((400, 400, 2))
+	# img = img.transpose([1,2,0])
+	# mask = mask.transpose([2,0,1])
+	# shape = np.array(img).shape
+	print(img.shape)
+	print(mask.shape)
+	# print(mask)
+	# print(img)
+	mask = np.array(mask)
+	
+	# mask = np.lib.pad(mask, ((0,0),(400,shape[1]-shape[0]-400)), 'constant', constant_values=(0, 0))
+	mask = Image.fromarray(mask)
+	img = Image.fromarray(img)
+	mask_data = mask.getdata()
+	a = img.getdata()
+	img = img.convert('RGBA')
+	l = list()
+	for i,j in zip(mask_data,a):
+	# print(i)
+		if i == 1:
+			l.append(( 255, j[1], j[2], 150))
+		else:
+			l.append((j[0], j[1], j[2], 255))
+	img.putdata(l)
+	img.show()
 
 if __name__ == '__main__':
-	get_x_and_y('new_sheep_image/', 'new_sheep_seg/', 'exception_train', 2, 2, 2, 2, 2)
+	# get_x_and_y('new_sheep_image/', 'new_sheep_seg/', 'exception_train', 2, 2, 2, 2, 2)
+	a, b, c = get_x_and_y('new_sheep_image/', 'new_sheep_seg/', 'exception_train', 2, 400, 400,400, 400)
+	for i,j in zip(a,b):
+		visulize(i,j)
