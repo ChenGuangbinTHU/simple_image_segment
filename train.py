@@ -1,6 +1,7 @@
 import argparse
 import Models , LoadBatches
 import FCN8
+import FCN_Atrous
 import numpy as np
 from keras.callbacks import ModelCheckpoint
 from keras import metrics
@@ -49,7 +50,8 @@ if validate:
 	val_batch_size = args.val_batch_size
 
 # modelFns = { 'vgg_segnet':Models.VGGSegnet.VGGSegnet , 'vgg_unet':Models.VGGUnet.VGGUnet , 'vgg_unet2':Models.VGGUnet.VGGUnet2 , 'fcn8':Models.FCN8.FCN8 , 'fcn32':Models.FCN32.FCN32   }
-modelFN = FCN8.FCN8
+modelFN = FCN_Atrous.FCN8_Atrous
+# modelFN = FCN8.FCN8
 
 m, m_exp = modelFN( n_classes , input_height=input_height, input_width=input_width   )
 m.compile(loss='binary_crossentropy',

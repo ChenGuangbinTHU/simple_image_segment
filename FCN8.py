@@ -155,7 +155,8 @@ def FCN8( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	# print(model.shape)
 	model.outputWidth = outputWidth
 	model.outputHeight = outputHeight
-
+	model.summary()
+	exit(0)
 	return model, exp_model
 
 
