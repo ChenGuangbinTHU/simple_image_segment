@@ -9,7 +9,7 @@ from keras.layers import *
 import tensorflow as tf
 import sys
 sys.path.insert(1, './src')
-from crfrnn_layer import CrfRnnLayer
+# from crfrnn_layer import CrfRnnLayer
 from keras.backend import permute_dimensions
 
 

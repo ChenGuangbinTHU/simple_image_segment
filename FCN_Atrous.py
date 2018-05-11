@@ -9,7 +9,7 @@ from keras.layers import *
 import tensorflow as tf
 import sys
 sys.path.insert(1, './src')
-from crfrnn_layer import CrfRnnLayer
+# from crfrnn_layer import CrfRnnLayer
 from keras.backend import permute_dimensions
 
 
@@ -56,49 +56,94 @@ def FCN8_Atrous( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	h = MaxPooling2D((3, 3), strides=(1, 1), name='block4_pool', data_format=IMAGE_ORDERING )(x)
 	f4 = x
 
+	'''
 	# Block 5
 	h = ZeroPadding2D(padding=(2, 2))(h)
-	h = AtrousConvolution2D(512, (3, 3), atrous_rate=(2, 2), activation='relu', name='conv5_1')(h)
+	h = AtrousConvolution2D(512, 3, 3, atrous_rate=(2, 2), activation='relu', name='conv5_1', data_format=IMAGE_ORDERING)(h)
 	h = ZeroPadding2D(padding=(2, 2))(h)
-	h = AtrousConvolution2D(512, (3, 3), atrous_rate=(2, 2), activation='relu', name='conv5_2')(h)
+	h = AtrousConvolution2D(512, 3, 3, atrous_rate=(2, 2), activation='relu', name='conv5_2', data_format=IMAGE_ORDERING)(h)
 	h = ZeroPadding2D(padding=(2, 2))(h)
-	h = AtrousConvolution2D(512, (3, 3), atrous_rate=(2, 2), activation='relu', name='conv5_3')(h)
+	h = AtrousConvolution2D(512, 3, 3, atrous_rate=(2, 2), activation='relu', name='conv5_3', data_format=IMAGE_ORDERING)(h)
 	h = ZeroPadding2D(padding=(1, 1))(h)
 	p5 = MaxPooling2D(pool_size=(3, 3), strides=(1, 1))(h)
 
 	# branching for Atrous Spatial Pyramid Pooling
 	# hole = 6
 	b1 = ZeroPadding2D(padding=(6, 6))(p5)
-	b1 = AtrousConvolution2D(1024, (3, 3), atrous_rate=(6, 6), activation='relu', name='fc6_1')(b1)
+	b1 = AtrousConvolution2D(1024, 3, 3, atrous_rate=(6, 6), activation='relu', name='fc6_1', data_format=IMAGE_ORDERING)(b1)
 	b1 = Dropout(0.5)(b1)
-	b1 = Convolution2D(1024, (1, 1), activation='relu', name='fc7_1')(b1)
+	b1 = Convolution2D(1024, 1, 1, activation='relu', name='fc7_1', data_format=IMAGE_ORDERING)(b1)
 	b1 = Dropout(0.5)(b1)
-	b1 = Convolution2D(2, (1, 1), activation='relu', name='fc8_voc12_1')(b1)
+	b1 = Convolution2D(2, 1, 1, activation='relu', name='fc8_voc12_1', data_format=IMAGE_ORDERING)(b1)
 
 	# hole = 12
 	b2 = ZeroPadding2D(padding=(12, 12))(p5)
-	b2 = AtrousConvolution2D(1024, (3, 3), atrous_rate=(12, 12), activation='relu', name='fc6_2')(b2)
+	b2 = AtrousConvolution2D(1024, 3, 3, atrous_rate=(12, 12), activation='relu', name='fc6_2', data_format=IMAGE_ORDERING)(b2)
 	b2 = Dropout(0.5)(b2)
-	b2 = Convolution2D(1024, (1, 1), activation='relu', name='fc7_2')(b2)
+	b2 = Convolution2D(1024, 1, 1, activation='relu', name='fc7_2', data_format=IMAGE_ORDERING)(b2)
 	b2 = Dropout(0.5)(b2)
-	b2 = Convolution2D(2, (1, 1), activation='relu', name='fc8_voc12_2')(b2)
+	b2 = Convolution2D(2, 1, 1, activation='relu', name='fc8_voc12_2', data_format=IMAGE_ORDERING)(b2)
 
 	# hole = 18
 	b3 = ZeroPadding2D(padding=(18, 18))(p5)
-	b3 = AtrousConvolution2D(1024, (3, 3), atrous_rate=(18, 18), activation='relu', name='fc6_3')(b3)
+	b3 = AtrousConvolution2D(1024, 3, 3, atrous_rate=(18, 18), activation='relu', name='fc6_3', data_format=IMAGE_ORDERING)(b3)
 	b3 = Dropout(0.5)(b3)
-	b3 = Convolution2D(1024, (1, 1), activation='relu', name='fc7_3')(b3)
+	b3 = Convolution2D(1024, 1, 1, activation='relu', name='fc7_3', data_format=IMAGE_ORDERING)(b3)
 	b3 = Dropout(0.5)(b3)
-	b3 = Convolution2D(2, (1, 1), activation='relu', name='fc8_voc12_3')(b3)
+	b3 = Convolution2D(2, 1, 1, activation='relu', name='fc8_voc12_3', data_format=IMAGE_ORDERING)(b3)
 
 	# hole = 24
 	b4 = ZeroPadding2D(padding=(24, 24))(p5)
-	b4 = AtrousConvolution2D(1024, (3, 3), atrous_rate=(24, 24), activation='relu', name='fc6_4')(b4)
+	b4 = AtrousConvolution2D(1024, 3, 3, atrous_rate=(24, 24), activation='relu', name='fc6_4', data_format=IMAGE_ORDERING)(b4)
 	b4 = Dropout(0.5)(b4)
-	b4 = Convolution2D(1024, (1, 1), activation='relu', name='fc7_4')(b4)
+	b4 = Convolution2D(1024, 1, 1, activation='relu', name='fc7_4', data_format=IMAGE_ORDERING)(b4)
 	b4 = Dropout(0.5)(b4)
-	b4 = Convolution2D(2, (1, 1), activation='relu', name='fc8_voc12_4')(b4)
+	b4 = Convolution2D(2, 1, 1, activation='relu', name='fc8_voc12_4', data_format=IMAGE_ORDERING)(b4)
 
+	'''
+	# Block 5
+	h = ZeroPadding2D(padding=(2, 2))(h)
+	h = Conv2D(512, (3, 3), dilation_rate=(2, 2), activation='relu', name='conv5_1', data_format=IMAGE_ORDERING)(h)
+	h = ZeroPadding2D(padding=(2, 2))(h)
+	h = Conv2D(512, (3, 3), dilation_rate=(2, 2), activation='relu', name='conv5_2', data_format=IMAGE_ORDERING)(h)
+	h = ZeroPadding2D(padding=(2, 2))(h)
+	h = Conv2D(512, (3, 3), dilation_rate=(2, 2), activation='relu', name='conv5_3', data_format=IMAGE_ORDERING)(h)
+	h = ZeroPadding2D(padding=(1, 1))(h)
+	p5 = MaxPooling2D(pool_size=(3, 3), strides=(1, 1))(h)
+
+	# branching for Atrous Spatial Pyramid Pooling
+	# hole = 6
+	b1 = ZeroPadding2D(padding=(6, 6))(p5)
+	b1 = Conv2D(1024, (3, 3), dilation_rate=(6, 6), activation='relu', name='fc6_1', data_format=IMAGE_ORDERING)(b1)
+	b1 = Dropout(0.5)(b1)
+	b1 = Conv2D(1024, (1, 1), activation='relu', name='fc7_1', data_format=IMAGE_ORDERING)(b1)
+	b1 = Dropout(0.5)(b1)
+	b1 = Conv2D(2, (1, 1), activation='relu', name='fc8_voc12_1', data_format=IMAGE_ORDERING)(b1)
+
+	# hole = 12
+	b2 = ZeroPadding2D(padding=(12, 12))(p5)
+	b2 = Conv2D(1024, (3, 3), dilation_rate=(12, 12), activation='relu', name='fc6_2', data_format=IMAGE_ORDERING)(b2)
+	b2 = Dropout(0.5)(b2)
+	b2 = Conv2D(1024, (1, 1), activation='relu', name='fc7_2', data_format=IMAGE_ORDERING)(b2)
+	b2 = Dropout(0.5)(b2)
+	b2 = Conv2D(2, (1, 1), activation='relu', name='fc8_voc12_2', data_format=IMAGE_ORDERING)(b2)
+
+	# hole = 18
+	b3 = ZeroPadding2D(padding=(18, 18))(p5)
+	b3 = Conv2D(1024, (3, 3), dilation_rate=(18, 18), activation='relu', name='fc6_3', data_format=IMAGE_ORDERING)(b3)
+	b3 = Dropout(0.5)(b3)
+	b3 = Conv2D(1024, (1, 1), activation='relu', name='fc7_3', data_format=IMAGE_ORDERING)(b3)
+	b3 = Dropout(0.5)(b3)
+	b3 = Conv2D(2, (1, 1), activation='relu', name='fc8_voc12_3', data_format=IMAGE_ORDERING)(b3)
+
+	# hole = 24
+	b4 = ZeroPadding2D(padding=(24, 24))(p5)
+	b4 = Conv2D(1024, (3, 3), dilation_rate=(24, 24), activation='relu', name='fc6_4', data_format=IMAGE_ORDERING)(b4)
+	b4 = Dropout(0.5)(b4)
+	b4 = Conv2D(1024, (1, 1), activation='relu', name='fc7_4', data_format=IMAGE_ORDERING)(b4)
+	b4 = Dropout(0.5)(b4)
+	b4 = Conv2D(2, (1, 1), activation='relu', name='fc8_voc12_4', data_format=IMAGE_ORDERING)(b4)
+	
 	logits = merge([b1, b2, b3, b4], mode='sum')
 	# logits = BilinearUpsampling(upsampling=upsampling)(s)
 

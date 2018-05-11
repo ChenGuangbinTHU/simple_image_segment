@@ -1,5 +1,5 @@
 import argparse
-import Models , LoadBatches
+import LoadBatches
 import FCN8
 import FCN_Atrous
 import numpy as np
@@ -12,8 +12,8 @@ parser.add_argument("--save_weights_path", type = str  )
 parser.add_argument("--train_images", type = str  )
 parser.add_argument("--train_annotations", type = str  )
 parser.add_argument("--n_classes", type=int )
-parser.add_argument("--input_height", type=int , default =400  )
-parser.add_argument("--input_width", type=int , default = 400 )
+parser.add_argument("--input_height", type=int , default =600  )
+parser.add_argument("--input_width", type=int , default = 600 )
 
 parser.add_argument('--validate',action='store_false', default=True)
 parser.add_argument("--val_images", type = str , default = "")

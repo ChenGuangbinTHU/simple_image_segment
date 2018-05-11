@@ -6,7 +6,7 @@ import itertools
 import random
 import pickle
 import keras
-from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
 
 def getImageArr( path , width , height , imgNorm="sub_mean" , odering='channels_first' ):
 	# print(path)
