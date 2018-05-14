@@ -8,6 +8,7 @@ import random
 import FCN8
 import time
 import os
+import FCN_Atrous
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
 parser = argparse.ArgumentParser()
@@ -30,8 +31,8 @@ input_height = args.input_height
 epoch_number = args.epoch_number
 print('666')
 # modelFns = { 'vgg_segnet':Models.VGGSegnet.VGGSegnet , 'vgg_unet':Models.VGGUnet.VGGUnet , 'vgg_unet2':Models.VGGUnet.VGGUnet2 , 'fcn8':Models.FCN8.FCN8 , 'fcn32':Models.FCN32.FCN32   }
-modelFN = FCN8.FCN8
-
+# modelFN = FCN8.FCN8
+modelFN = FCN_Atrous.FCN8_Atrous
 m, m_exp = modelFN( n_classes , input_height=input_height, input_width=input_width   )
 m.load_weights(  args.save_weights_path + "." + str(  epoch_number )  )
 # m.compile(loss='categorical_crossentropy',

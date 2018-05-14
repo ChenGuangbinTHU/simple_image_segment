@@ -12,8 +12,8 @@ parser.add_argument("--save_weights_path", type = str  )
 parser.add_argument("--train_images", type = str  )
 parser.add_argument("--train_annotations", type = str  )
 parser.add_argument("--n_classes", type=int )
-parser.add_argument("--input_height", type=int , default =600  )
-parser.add_argument("--input_width", type=int , default = 600 )
+parser.add_argument("--input_height", type=int , default =400  )
+parser.add_argument("--input_width", type=int , default = 400 )
 
 parser.add_argument('--validate',action='store_false', default=True)
 parser.add_argument("--val_images", type = str , default = "")
@@ -75,6 +75,8 @@ print(output_width)
 
 train_x, train_y, train_y_exp = LoadBatches.get_x_and_y(train_images_path, train_segs_path, 'exception_train', n_classes, input_height, input_width,output_height, output_width)
 # G  = LoadBatches.imageSegmentationGenerator( train_images_path , train_segs_path ,  train_batch_size,  n_classes , input_height , input_width , output_height , output_width   )
+
+
 checkpoint = ModelCheckpoint(save_weights_path+'.0', monitor='val_acc', verbose=1, save_best_only=True,mode='max')
 callbacks_list = [checkpoint]
 checkpoint_exp = ModelCheckpoint(save_weights_path+'exp', monitor='val_acc', verbose=1, save_best_only=True,mode='max')
@@ -93,7 +95,7 @@ else:
 	# for ep in range( epochs ):
 	# 	print(ep)
 		# m.fit_generator( G , 13  ,shuffle = False, validation_data=G2 , validation_steps=5 ,class_weight=[1.0, 1.0],  epochs=1, callbacks=callbacks_list )
-	m.fit(train_x, train_y, batch_size=10, epochs=100, validation_data=(val_x, val_y), callbacks=callbacks_list)
+	m.fit(train_x, train_y, batch_size=5, epochs=epochs, validation_data=(val_x, val_y), callbacks=callbacks_list)
 	# m_exp.fit(train_x, train_y_exp, batch_size=10, epochs=100, validation_data=(val_x, val_y_exp), callbacks=[checkpoint_exp])
 		# m.save_weights( save_weights_path + "." + str( ep )  )
 		# m.save( save_weights_path + ".model." + str( ep ) )
