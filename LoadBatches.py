@@ -58,6 +58,7 @@ def getSegmentationArr( path , nClasses ,  width , height  ):
 		print (e)
 		
 	seg_labels = np.reshape(seg_labels, ( width*height , nClasses ))
+	# seg_labels = seg_labels.transpose((2,0,1))
 	return seg_labels
 
 '''
