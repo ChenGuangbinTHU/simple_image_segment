@@ -12,6 +12,7 @@ sys.path.insert(1, './src')
 # from crfrnn_layer import CrfRnnLayer
 from keras.backend import permute_dimensions
 from keras import backend as K
+import deeplabv3
 
 
 import os
@@ -34,6 +35,7 @@ def FCN8_Atrous( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(x)
 	x = Conv2D(8, (3, 3), activation='relu', name='block1_conv2', data_format=IMAGE_ORDERING )(x)
 	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(img_input)
+	# x = BatchNormalization()(x)
 	x = MaxPooling2D((3, 3), strides=(2, 2), name='block1_pool', data_format=IMAGE_ORDERING )(x)
 
 	# Block 2
@@ -42,6 +44,7 @@ def FCN8_Atrous( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(x)
 	x = Conv2D(16, (3, 3), activation='relu', name='block2_conv2', data_format=IMAGE_ORDERING )(x)
 	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(x)
+	# x = BatchNormalization()(x)
 	x = MaxPooling2D((3, 3), strides=(2, 2), name='block2_pool', data_format=IMAGE_ORDERING )(x)
 	f2 = x
 	
@@ -53,6 +56,7 @@ def FCN8_Atrous( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(x)
 	x = Conv2D(32, (3, 3), activation='relu', name='block3_conv3', data_format=IMAGE_ORDERING )(x)
 	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(x)
+	# x = BatchNormalization()(x)
 	x = MaxPooling2D((3, 3), strides=(2, 2), name='block3_pool', data_format=IMAGE_ORDERING )(x)
 	f3 = x
 
@@ -64,6 +68,7 @@ def FCN8_Atrous( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(x)
 	x = Conv2D(64, (3, 3), activation='relu', name='block4_conv3', data_format=IMAGE_ORDERING )(x)
 	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(x)
+	# x = BatchNormalization()(x)
 	h = MaxPooling2D((3, 3), strides=(1, 1), name='block4_pool', data_format=IMAGE_ORDERING )(x)
 	f4 = x
 	
@@ -75,6 +80,7 @@ def FCN8_Atrous( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	h = ZeroPadding2D(padding=(2, 2), data_format=IMAGE_ORDERING)(h)
 	h = Conv2D(64, (3, 3),dilation_rate=(2, 2), activation='relu', name='conv5_3', data_format=IMAGE_ORDERING)(h)
 	h = ZeroPadding2D(padding=(1, 1), data_format=IMAGE_ORDERING)(h)
+	# x = BatchNormalization()(x)
 	p5 = MaxPooling2D(pool_size=(3, 3),strides=(1, 1), data_format=IMAGE_ORDERING)(h)
 
 	# branching for Atrous Spatial Pyramid Pooling
@@ -115,11 +121,20 @@ def FCN8_Atrous( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	# out = UpSampling2D(size=(8,8), data_format=IMAGE_ORDERING)(logits)
 	
 	# logits = BilinearUpsampling(upsampling=upsampling)(s)
-	
+	'''
+	def mul_minus_one(a):
+		a = Permute((2, 3, 1))(a)
+		a = K.tf.image.resize_bilinear(a,(input_height, input_width),align_corners=True)
+		a = Permute((3, 1, 2))(a)
+		return a
+	def mul_minus_one_output_shape(input_shape):
+		return input_shape
+	'''
 	def mul_minus_one(a):
 		return K.resize_images(a,8, 8, data_format=IMAGE_ORDERING)
 	def mul_minus_one_output_shape(input_shape):
 		return input_shape
+	
 
 	# out = (Activation('softmax'))(logits)
 	resize = Lambda(mul_minus_one)
@@ -147,7 +162,7 @@ def FCN8_Atrous( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	model.summary()
 	# exit(0)
 	exp_model=model
-	return model, exp_model
+	return model
 
 
 
