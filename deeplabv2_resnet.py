@@ -12,6 +12,7 @@ sys.path.insert(1, './src')
 # from crfrnn_layer import CrfRnnLayer
 from keras.backend import permute_dimensions
 from keras import backend as K
+import resnet_keras
 
 
 
@@ -23,66 +24,14 @@ VGG_Weights_path = file_path+"/data/vgg16_weights_th_dim_ordering_th_kernels.h5"
 IMAGE_ORDERING = 'channels_first' 
 
 
-def FCN8_Atrous( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
+def deeplabv2_resnet( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 
 	# assert input_height%32 == 0
 	# assert input_width%32 == 0
 
 	# https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg16_weights_th_dim_ordering_th_kernels.h5
 	img_input = Input(shape=(3,input_height,input_width))
-	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(img_input)
-	x = Conv2D(8, (3, 3), activation='relu', name='block1_conv1', data_format=IMAGE_ORDERING )(x)
-	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(x)
-	x = Conv2D(8, (3, 3), activation='relu', name='block1_conv2', data_format=IMAGE_ORDERING )(x)
-	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(img_input)
-	# x = BatchNormalization()(x)
-	x = MaxPooling2D((3, 3), strides=(2, 2), name='block1_pool', data_format=IMAGE_ORDERING )(x)
-
-	# Block 2
-	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(x)
-	x = Conv2D(16, (3, 3), activation='relu', name='block2_conv1', data_format=IMAGE_ORDERING )(x)
-	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(x)
-	x = Conv2D(16, (3, 3), activation='relu', name='block2_conv2', data_format=IMAGE_ORDERING )(x)
-	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(x)
-	# x = BatchNormalization()(x)
-	x = MaxPooling2D((3, 3), strides=(2, 2), name='block2_pool', data_format=IMAGE_ORDERING )(x)
-	f2 = x
-	
-	# Block 3
-	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(x)
-	x = Conv2D(32, (3, 3), activation='relu', name='block3_conv1', data_format=IMAGE_ORDERING )(x)
-	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(x)
-	x = Conv2D(32, (3, 3), activation='relu', name='block3_conv2', data_format=IMAGE_ORDERING )(x)
-	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(x)
-	x = Conv2D(32, (3, 3), activation='relu', name='block3_conv3', data_format=IMAGE_ORDERING )(x)
-	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(x)
-	# x = BatchNormalization()(x)
-	x = MaxPooling2D((3, 3), strides=(2, 2), name='block3_pool', data_format=IMAGE_ORDERING )(x)
-	f3 = x
-
-	# Block 4
-	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(x)
-	x = Conv2D(64, (3, 3), activation='relu', name='block4_conv1', data_format=IMAGE_ORDERING )(x)
-	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(x)
-	x = Conv2D(64, (3, 3), activation='relu', name='block4_conv2', data_format=IMAGE_ORDERING )(x)
-	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(x)
-	x = Conv2D(64, (3, 3), activation='relu', name='block4_conv3', data_format=IMAGE_ORDERING )(x)
-	x = ZeroPadding2D(padding=(1,1), data_format=IMAGE_ORDERING )(x)
-	# x = BatchNormalization()(x)
-	h = MaxPooling2D((3, 3), strides=(1, 1), name='block4_pool', data_format=IMAGE_ORDERING )(x)
-	f4 = x
-	
-	# Block 5
-	h = ZeroPadding2D(padding=(2, 2), data_format=IMAGE_ORDERING)(h)
-	h = Conv2D(64, (3, 3),dilation_rate=(2, 2), activation='relu', name='conv5_1', data_format=IMAGE_ORDERING)(h)
-	h = ZeroPadding2D(padding=(2, 2), data_format=IMAGE_ORDERING)(h)
-	h = Conv2D(64, (3, 3),dilation_rate=(2, 2), activation='relu', name='conv5_2', data_format=IMAGE_ORDERING)(h)
-	h = ZeroPadding2D(padding=(2, 2), data_format=IMAGE_ORDERING)(h)
-	h = Conv2D(64, (3, 3),dilation_rate=(2, 2), activation='relu', name='conv5_3', data_format=IMAGE_ORDERING)(h)
-	h = ZeroPadding2D(padding=(1, 1), data_format=IMAGE_ORDERING)(h)
-	# x = BatchNormalization()(x)
-	p5 = MaxPooling2D(pool_size=(3, 3),strides=(1, 1), data_format=IMAGE_ORDERING)(h)
-
+	p5 = resnet_keras.resnet_18_output(img_input)
 	# branching for Atrous Spatial Pyramid Pooling
 	# hole = 6
 	# b1 = ZeroPadding2D(padding=(6, 6))(p5)

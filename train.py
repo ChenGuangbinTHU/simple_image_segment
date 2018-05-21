@@ -6,6 +6,7 @@ import numpy as np
 from keras.callbacks import ModelCheckpoint
 from keras import metrics
 import deeplabv3
+import deeplabv2_resnet
 
 
 parser = argparse.ArgumentParser()
@@ -13,8 +14,8 @@ parser.add_argument("--save_weights_path", type = str  )
 parser.add_argument("--train_images", type = str  )
 parser.add_argument("--train_annotations", type = str  )
 parser.add_argument("--n_classes", type=int )
-parser.add_argument("--input_height", type=int , default =512  )
-parser.add_argument("--input_width", type=int , default = 512 )
+parser.add_argument("--input_height", type=int , default =400  )
+parser.add_argument("--input_width", type=int , default = 400 )
 
 parser.add_argument('--validate',action='store_false', default=True)
 parser.add_argument("--val_images", type = str , default = "")
@@ -53,7 +54,8 @@ if validate:
 # modelFns = { 'vgg_segnet':Models.VGGSegnet.VGGSegnet , 'vgg_unet':Models.VGGUnet.VGGUnet , 'vgg_unet2':Models.VGGUnet.VGGUnet2 , 'fcn8':Models.FCN8.FCN8 , 'fcn32':Models.FCN32.FCN32   }
 # modelFN = FCN_Atrous.FCN8_Atrous
 # modelFN = FCN8.FCN8
-modelFN = deeplabv3.deeplabv3_plus
+modelFN = deeplabv2_resnet.deeplabv2_resnet
+# modelFN = deeplabv3.deeplabv3_plus
 
 m = modelFN( n_classes , input_height=input_height, input_width=input_width   )
 m.compile(loss='binary_crossentropy',

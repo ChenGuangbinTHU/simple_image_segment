@@ -10,6 +10,7 @@ import FCN8
 import time
 import os
 import FCN_Atrous
+import deeplabv2_resnet
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
 parser = argparse.ArgumentParser()
@@ -17,8 +18,8 @@ parser.add_argument("--save_weights_path", type = str  )
 parser.add_argument("--epoch_number", type = int, default = 5 )
 parser.add_argument("--test_images", type = str , default = "")
 parser.add_argument("--output_path", type = str , default = "")
-parser.add_argument("--input_height", type=int , default = 512  )
-parser.add_argument("--input_width", type=int , default = 512 )
+parser.add_argument("--input_height", type=int , default = 400  )
+parser.add_argument("--input_width", type=int , default = 400 )
 parser.add_argument("--model_name", type = str , default = "")
 parser.add_argument("--n_classes", type=int )
 
@@ -34,7 +35,8 @@ print('666')
 # modelFns = { 'vgg_segnet':Models.VGGSegnet.VGGSegnet , 'vgg_unet':Models.VGGUnet.VGGUnet , 'vgg_unet2':Models.VGGUnet.VGGUnet2 , 'fcn8':Models.FCN8.FCN8 , 'fcn32':Models.FCN32.FCN32   }
 # modelFN = FCN8.FCN8
 # modelFN = FCN_Atrous.FCN8_Atrous
-modelFN = deeplabv3.deeplabv3_plus
+# modelFN = deeplabv3.deeplabv3_plus
+modelFN = deeplabv2_resnet.deeplabv2_resnet
 m = modelFN( n_classes , input_height=input_height, input_width=input_width   )
 m.load_weights(  args.save_weights_path + "." + str(  epoch_number )  )
 # m.compile(loss='categorical_crossentropy',
