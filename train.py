@@ -51,7 +51,7 @@ if validate:
 	val_batch_size = args.val_batch_size
 
 # modelFns = { 'vgg_segnet':Models.VGGSegnet.VGGSegnet , 'vgg_unet':Models.VGGUnet.VGGUnet , 'vgg_unet2':Models.VGGUnet.VGGUnet2 , 'fcn8':Models.FCN8.FCN8 , 'fcn32':Models.FCN32.FCN32   }
-modelFN = FCN_Atrous.FCN8_Atrous
+# modelFN = FCN_Atrous.FCN8_Atrous
 # modelFN = FCN8.FCN8
 modelFN = deeplabv3.deeplabv3_plus
 

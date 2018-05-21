@@ -1,0 +1,7 @@
+{
+    "editor.fontSize": 20,
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 100,
+    "editor.renderWhitespace": "all",
+    "python.linting.pylintEnabled": false
+}
