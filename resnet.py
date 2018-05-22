@@ -201,13 +201,128 @@ class ResnetBuilder(object):
             input_shape = (input_shape[1], input_shape[2], input_shape[0])
 
         # Load function from str if needed.
-        block_fn = _get_block(block_fn)
+        block_fn = _gimport keras.backend as K
+import tensorflow as tf
+from tensorflow.python.ops import control_flow_ops
 
-        input = Input(shape=input_shape)
-        conv1 = _conv_bn_relu(filters=64, kernel_size=(7, 7), strides=(2, 2))(input)
-        pool1 = MaxPooling2D(pool_size=(3, 3), strides=(2, 2), padding="same")(conv1)
+def Mean_IoU(classes):
+    def mean_iou(y_true, y_pred):
+        mean_iou, op = tf.metrics.mean_iou(y_true, y_pred, classes)
+        return mean_iou
+    _initialize_variables()
+    return mean_iou
 
-        block = pool1
+
+def _initialize_variables():
+    """Utility to initialize uninitialized variables on the fly.
+    """
+    variables = tf.local_variables()
+    uninitialized_variables = []
+    for v in variables:
+        if not hasattr(v, '_keras_initialized') or not v._keras_initialized:
+            uninitialized_variables.append(v)
+            v._keras_initialized = True
+    if uninitialized_variables:
+        sess = K.get_session()
+        sess.run(tf.variables_initializer(uninitialized_variables)_block(block_fn)
+
+        input = Inputimport keras.backend as K
+import tensorflow as tf
+from tensorflow.python.ops import control_flow_ops
+
+def Mean_IoU(classes):
+    def mean_iou(y_true, y_pred):
+        mean_iou, op = tf.metrics.mean_iou(y_true, y_pred, classes)
+        return mean_iou
+    _initialize_variables()
+    return mean_iou
+
+
+def _initialize_variables():
+    """Utility to initialize uninitialized variables on the fly.
+    """
+    variables = tf.local_variables()
+    uninitialized_variables = []
+    for v in variables:
+        if not hasattr(v, '_keras_initialized') or not v._keras_initialized:
+            uninitialized_variables.append(v)
+            v._keras_initialized = True
+    if uninitialized_variables:
+        sess = K.get_session()
+        sess.run(tf.variables_initializer(uninitialized_variables)hape=input_shape)
+        conv1 = _convimport keras.backend as K
+import tensorflow as tf
+from tensorflow.python.ops import control_flow_ops
+
+def Mean_IoU(classes):
+    def mean_iou(y_true, y_pred):
+        mean_iou, op = tf.metrics.mean_iou(y_true, y_pred, classes)
+        return mean_iou
+    _initialize_variables()
+    return mean_iou
+
+
+def _initialize_variables():
+    """Utility to initialize uninitialized variables on the fly.
+    """
+    variables = tf.local_variables()
+    uninitialized_variables = []
+    for v in variables:
+        if not hasattr(v, '_keras_initialized') or not v._keras_initialized:
+            uninitialized_variables.append(v)
+            v._keras_initialized = True
+    if uninitialized_variables:
+        sess = K.get_session()
+        sess.run(tf.variables_initializer(uninitialized_variables)n_relu(filters=64, kernel_size=(7, 7), strides=(2, 2))(input)
+        pool1 = MaxPoimport keras.backend as K
+import tensorflow as tf
+from tensorflow.python.ops import control_flow_ops
+
+def Mean_IoU(classes):
+    def mean_iou(y_true, y_pred):
+        mean_iou, op = tf.metrics.mean_iou(y_true, y_pred, classes)
+        return mean_iou
+    _initialize_variables()
+    return mean_iou
+
+
+def _initialize_variables():
+    """Utility to initialize uninitialized variables on the fly.
+    """
+    variables = tf.local_variables()
+    uninitialized_variables = []
+    for v in variables:
+        if not hasattr(v, '_keras_initialized') or not v._keras_initialized:
+            uninitialized_variables.append(v)
+            v._keras_initialized = True
+    if uninitialized_variables:
+        sess = K.get_session()
+        sess.run(tf.variables_initializer(uninitialized_variables)ing2D(pool_size=(3, 3), strides=(2, 2), padding="same")(conv1)
+
+        block = pool1import keras.backend as K
+import tensorflow as tf
+from tensorflow.python.ops import control_flow_ops
+
+def Mean_IoU(classes):
+    def mean_iou(y_true, y_pred):
+        mean_iou, op = tf.metrics.mean_iou(y_true, y_pred, classes)
+        return mean_iou
+    _initialize_variables()
+    return mean_iou
+
+
+def _initialize_variables():
+    """Utility to initialize uninitialized variables on the fly.
+    """
+    variables = tf.local_variables()
+    uninitialized_variables = []
+    for v in variables:
+        if not hasattr(v, '_keras_initialized') or not v._keras_initialized:
+            uninitialized_variables.append(v)
+            v._keras_initialized = True
+    if uninitialized_variables:
+        sess = K.get_session()
+        sess.run(tf.variables_initializer(uninitialized_variables)
         filters = 64
         for i, r in enumerate(repetitions):
             block = _residual_block(block_fn, filters=filters, repetitions=r, is_first_layer=(i == 0))(block)

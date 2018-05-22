@@ -4,18 +4,21 @@ import FCN8
 import FCN_Atrous
 import numpy as np
 from keras.callbacks import ModelCheckpoint
+from keras.layers import *
 from keras import metrics
 import deeplabv3
 import deeplabv2_resnet
-
+import metrics
+from keras import backend as K
+import tensorflow as tf
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--save_weights_path", type = str  )
 parser.add_argument("--train_images", type = str  )
 parser.add_argument("--train_annotations", type = str  )
 parser.add_argument("--n_classes", type=int )
-parser.add_argument("--input_height", type=int , default =400  )
-parser.add_argument("--input_width", type=int , default = 400 )
+parser.add_argument("--input_height", type=int , default =1000  )
+parser.add_argument("--input_width", type=int , default = 1000 )
 
 parser.add_argument('--validate',action='store_false', default=True)
 parser.add_argument("--val_images", type = str , default = "")
@@ -57,10 +60,22 @@ if validate:
 modelFN = deeplabv2_resnet.deeplabv2_resnet
 # modelFN = deeplabv3.deeplabv3_plus
 
+# def mean_iou(y_true, y_pre
+#     return K.tf.metrics.mean_iou(y_true, y_pred, num_classes=2)d):
+
+NUM_CLASSES = 2
+
+def mean_iou(y_true, y_pred):
+    score, up_opt = tf.metrics.mean_iou(y_true, y_pred, NUM_CLASSES)
+    K.get_session().run(tf.local_variables_initializer())
+    with tf.control_dependencies([up_opt]):
+        score = tf.identity(score)
+    return score
+
 m = modelFN( n_classes , input_height=input_height, input_width=input_width   )
 m.compile(loss='binary_crossentropy',
       optimizer= optimizer_name ,
-      metrics=[ 'accuracy'])
+      metrics=[mean_iou])
 
 # sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True) 
 # m_exp.compile(loss='binary_crossentropy',optimizer=optimizer_name,metrics=['accuracy'])
@@ -82,7 +97,7 @@ train_x, train_y, train_y_exp = LoadBatches.get_x_and_y(train_images_path, train
 # G  = LoadBatches.imageSegmentationGenerator( train_images_path , train_segs_path ,  train_batch_size,  n_classes , input_height , input_width , output_height , output_width   )
 
 
-checkpoint = ModelCheckpoint(save_weights_path+'.0', monitor='val_acc', verbose=1, save_best_only=True,mode='max')
+checkpoint = ModelCheckpoint(save_weights_path+'.0', monitor='val_mean_iou', verbose=1, save_best_only=True,mode='max')
 callbacks_list = [checkpoint]
 # checkpoint_exp = ModelCheckpoint(save_weights_path+'exp', monitor='val_acc', verbose=1, save_best_only=True,mode='max')
 

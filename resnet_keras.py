@@ -60,10 +60,11 @@ def dilated_basic_block(inputs, num_o, dilated_rate, half_size = False, identity
 def resnet_18_output(inputs):
     o = start_block(inputs)
     for i in range(0, 4):
-        print(i)
         for j in range(2):
-            print('    ',j,i == 1 and j == 0, not j==0)
-            o = basic_block(o, 16*2**i, i == 1 and j == 0,not j == 0)
+            if i < 2:
+                o = basic_block(o, 16*2**i, i == 1 and j == 0,not j == 0)
+            else:
+                o = dilated_basic_block(o, 16*2**i, 2, i == 1 and j == 0,not j == 0)
     return o
 
 if __name__ == '__main__':
