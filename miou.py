@@ -21,6 +21,7 @@ def miou(predict, ground_truth):
 	# Image.fromarray(p).show()
 	print(g.shape)
 	print(p.shape)
+	ans = 0
 	# print(g)
 	# exit(0)
 	for gg,pp in zip(g.ravel(), p.ravel()):
@@ -28,8 +29,17 @@ def miou(predict, ground_truth):
 			i_cnt += 1
 		if gg == 1 or pp == 1:
 			u_cnt += 1
-	print(i_cnt/u_cnt)
-	return i_cnt/u_cnt
+	ans += i_cnt/u_cnt
+	i_cnt = 0
+	u_cnt = 0
+	# for gg,pp in zip(g.ravel(), p.ravel()):
+	# 	if gg == 0 and pp == 0:
+	# 		i_cnt += 1
+	# 	if gg == 0 or pp == 0:
+	# 		u_cnt += 1
+	# ans += i_cnt/u_cnt
+	print(ans)
+	return ans
 	# print(predict)
 
 if __name__ == '__main__':

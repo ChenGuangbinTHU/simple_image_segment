@@ -57,14 +57,56 @@ def dilated_basic_block(inputs, num_o, dilated_rate, half_size = False, identity
     output = Activation('relu')(output)
     return output
 
-def resnet_18_output(inputs):
+def bottleneck_block(inputs, num_o, half_size = False, identity_connection = True):
+    first_s = 2 if half_size else 1
+    assert num_o % 4 == 0, 'number of output ERROR'
+    #branch 1
+    if not identity_connection:
+        o_b1 = Conv2D(num_o, (1, 1), strides=(first_s, first_s), data_format=IMAGE_ORDERING)(inputs)
+        o_b1 = BatchNormalization()(o_b1)
+    else:
+        o_b1 = inputs
+    #branch2
+    o_b2 = Conv2D(int(num_o/4), (1, 1), strides=(first_s, first_s), padding='same', data_format=IMAGE_ORDERING)(inputs)
+    o_b2 = BatchNormalization()(o_b2)
+    o_b2 = Conv2D(int(num_o/4), (3, 3), strides=(1, 1), padding='same', data_format=IMAGE_ORDERING)(o_b2)
+    o_b2 = BatchNormalization()(o_b2)
+    o_b2 = Conv2D(num_o, (1, 1), strides=(1, 1), padding='same', data_format=IMAGE_ORDERING)(o_b2)
+    o_b2 = BatchNormalization()(o_b2)
+    output = add([o_b1, o_b2])
+    output = Activation('relu')(output)
+    return output
+
+def dilated_bottleneck_block(inputs, num_o, dilated_rate, half_size = False, identity_connection = True):
+    first_s = 2 if half_size else 1
+    assert num_o % 4 == 0, 'number of output ERROR'
+
+    #branch 1
+    if not identity_connection:
+        o_b1 = Conv2D(num_o, (1, 1), strides=(first_s, first_s), data_format=IMAGE_ORDERING)(inputs)
+        o_b1 = BatchNormalization()(o_b1)
+    else:
+        o_b1 = inputs
+
+    #branch2
+    o_b2 = Conv2D(int(num_o/4), (1, 1), strides=(first_s, first_s), padding='same', data_format=IMAGE_ORDERING)(inputs)
+    o_b2 = BatchNormalization()(o_b2)
+    o_b2 = Conv2D(int(num_o/4), (3, 3), dilation_rate=(dilated_rate, dilated_rate) , padding='same', data_format=IMAGE_ORDERING)(o_b2)
+    o_b2 = BatchNormalization()(o_b2)
+    o_b2 = Conv2D(num_o, (1, 1), strides=(1, 1), padding='same', data_format=IMAGE_ORDERING)(o_b2)
+    o_b2 = BatchNormalization()(o_b2)
+    output = add([o_b1, o_b2])
+    output = Activation('relu')(output)
+    return output
+
+def resnet_18_output(inputs, layers_num):
     o = start_block(inputs)
     for i in range(0, 4):
-        for j in range(2):
+        for j in range(layers_num[i]):
             if i < 2:
-                o = basic_block(o, 16*2**i, i == 1 and j == 0,not j == 0)
+                o = bottleneck_block(o, 16*2**i, i == 1 and j == 0,not j == 0)
             else:
-                o = dilated_basic_block(o, 16*2**i, 2, i == 1 and j == 0,not j == 0)
+                o = dilated_bottleneck_block(o, 16*2**i, 2, i == 1 and j == 0,not j == 0)
     return o
 
 if __name__ == '__main__':

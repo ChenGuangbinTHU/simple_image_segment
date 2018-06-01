@@ -61,41 +61,6 @@ def getSegmentationArr( path , nClasses ,  width , height  ):
 	# seg_labels = seg_labels.transpose((2,0,1))
 	return seg_labels
 
-'''
-def getSegmentationArr( path , nClasses ,  width , height  ):
-		
-	seg_labels = np.zeros((  height , width  , nClasses ))
-		
-	try:
-		img = load_label(path)
-
-		for c in range(nClasses):
-			seg_labels[: , : , c ] = (img == c ).astype(int)
-
-	except Exception as e:
-		print (e)
-		
-	seg_labels = np.reshape(seg_labels, ( width* height , nClasses ))
-	print(seg_labels)
-	exit(0)
-	# print(seg_labels.shape)
-	# exit(0)
-	return seg_labels
-
-def load_label(img_path):
-	"""
-	Load label image as 1 x height x width integer array of label indices.
-	The leading singleton dimension is required by the loss.
-	"""
-	im = np.array(Image.open(img_path)).astype(np.float32)
-	img_h, img_w = im.shape
-	pad_h = 224 - img_h
-	pad_w = 224 - img_w
-	im = np.pad(im, pad_width=((0, pad_h), (0, pad_w)), mode='constant', constant_values=0)
-	label = np.array(im, dtype=np.uint8)
-	# print(label)
-	return label
-'''
 
 def get_x_and_y(img_path, seg_path, exp_path, n_classes, input_height, input_width, output_width, output_height):
 	assert img_path[-1] == '/'

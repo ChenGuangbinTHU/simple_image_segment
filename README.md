@@ -6,3 +6,5 @@ python predict.py --save_weights_path='w/' --epoch_number=0 --test_images='new_s
 
 to do:same-sized predict mask to image 
         resnet
+        upsample logits
+        data augmentation

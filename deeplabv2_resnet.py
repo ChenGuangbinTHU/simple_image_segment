@@ -31,7 +31,7 @@ def deeplabv2_resnet( nClasses ,  input_height=416, input_width=608 , vgg_level=
 
 	# https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg16_weights_th_dim_ordering_th_kernels.h5
 	img_input = Input(shape=(3,input_height,input_width))
-	p5 = resnet_keras.resnet_18_output(img_input)
+	p5 = resnet_keras.resnet_18_output(img_input, [3, 4, 6,3])
 	# branching for Atrous Spatial Pyramid Pooling
 	# hole = 6
 	# b1 = ZeroPadding2D(padding=(6, 6))(p5)
