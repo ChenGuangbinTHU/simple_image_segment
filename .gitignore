@@ -23,3 +23,5 @@ val_seg_pre/
 w/
 result/
 .DS_Store
+tmp/
+aug_data/
