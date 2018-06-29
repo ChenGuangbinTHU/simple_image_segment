@@ -117,7 +117,7 @@ def vgg16_aspp( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	b4 = Conv2D(2, (1, 1), activation='relu', name='fc8_voc12_4', data_format=IMAGE_ORDERING)(b4)
 	
 	
-	logits = merge([b1, b2, b3, b4], mode='sum')#remove
+	logits = add([b1, b2, b3, b4], mode='sum')#remove
 	# out = UpSampling2D(size=(8,8), data_format=IMAGE_ORDERING)(logits)
 	
 	# logits = BilinearUpsampling(upsampling=upsampling)(s)
