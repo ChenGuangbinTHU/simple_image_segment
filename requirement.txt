@@ -1,6 +1,7 @@
 numpy
 opencv-python
-keras-gpu
+tensorflow-gpu
+keras
 pillow
 glob
 itertools
