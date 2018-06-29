@@ -46,14 +46,13 @@ def getSegmentationArr( path , nClasses ,  width , height  ):
 	seg_labels = np.zeros((  height , width  , nClasses ))
 	try:
 		img = cv2.imread(path, 1)
-		
+		# print(img.shape)
 		img = img[0:1080,400:1480]
-		
 		img = cv2.resize(img, ( width , height ))
 		img = img[:, : , 0]
 		for c in range(nClasses):
 			seg_labels[: , : , c ] = (img == c ).astype(int)
-
+		# Image.fromarray(img).show()
 	except Exception as e:
 		print (e)
 		
@@ -62,7 +61,7 @@ def getSegmentationArr( path , nClasses ,  width , height  ):
 	return seg_labels
 
 
-def get_x_and_y(img_path, seg_path, exp_path, n_classes, input_height, input_width, output_width, output_height):
+def get_x_and_y(img_path, seg_path, n_classes, input_height, input_width, output_width, output_height):
 	assert img_path[-1] == '/'
 	assert seg_path[-1] == '/'
 	# assert exp_path[-1] == '/'
@@ -70,8 +69,6 @@ def get_x_and_y(img_path, seg_path, exp_path, n_classes, input_height, input_wid
 	y = []
 	y_exception = []
 	
-	f = open(exp_path, 'rb')
-	exp = pickle.load(f)
 	images = glob.glob( img_path + "*.jpg"  ) + glob.glob(img_path +  "*.png"  ) +  glob.glob( img_path + "*.jpeg"  )
 	images.sort()
 	segmentations  = glob.glob( seg_path + "*.jpg"  ) + glob.glob( seg_path + "*.png"  ) +  glob.glob( seg_path + "*.jpeg"  )
@@ -84,16 +81,10 @@ def get_x_and_y(img_path, seg_path, exp_path, n_classes, input_height, input_wid
 	segmentations = [segmentations[i] for i in index]
 	
 	for img, seg in zip(images, segmentations):
-		# print(img)
 		x.append( getImageArr(img , input_width , input_height )  )
 		y.append( getSegmentationArr( seg , n_classes , output_width , output_height )  )
-		# y_exception.append(exp[img.split('/')[1]])
-	# for i, j, k in zip(images, segmentations, y_exception):
-	# 	print(i, j, k)
-	# print(x)
-	# print(y_exception)
-	# exit(0)
-	return np.array(x), np.array(y), keras.utils.to_categorical(np.array(y_exception), 2)
+
+	return np.array(x), np.array(y)
 
 def imageSegmentationGenerator( images_path , segs_path ,  batch_size,  n_classes , input_height , input_width , output_height , output_width   ):
 	
@@ -164,6 +155,8 @@ def visulize(img, mask):
 
 if __name__ == '__main__':
 	# get_x_and_y('new_sheep_image/', 'new_sheep_seg/', 'exception_train', 2, 2, 2, 2, 2)
-	a, b, c = get_x_and_y('new_sheep_image/', 'new_sheep_seg/', 'exception_train', 2, 400, 400,400, 400)
-	for i,j in zip(a,b):
-		visulize(i,j)
+	# a, b, c = get_x_and_y('new_sheep_image/', 'new_sheep_seg/', 'exception_train', 2, 400, 400,400, 400)
+	# for i,j in zip(a,b):
+	# 	visulize(i,j)
+	getSegmentationArr('aug_data/train/y/01.png', 2, 600, 600)
+	# getSegmentationArr('aug_data/train/y/next_gen_0_0_456.jpeg', 2, 600, 600)

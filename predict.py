@@ -1,44 +1,38 @@
 import argparse
-import Models , LoadBatches
+import LoadBatches
 from keras.models import load_model
-import deeplabv3
 import glob
 import cv2
 import numpy as np
 import random
-import FCN8
 import time
 import os
-import FCN_Atrous
-import deeplabv2_resnet
-os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
-os.environ["CUDA_VISIBLE_DEVICES"] = ""
-parser = argparse.ArgumentParser()
-parser.add_argument("--save_weights_path", type = str  )
-parser.add_argument("--epoch_number", type = int, default = 5 )
-parser.add_argument("--test_images", type = str , default = "")
-parser.add_argument("--output_path", type = str , default = "")
-parser.add_argument("--input_height", type=int , default = 400  )
-parser.add_argument("--input_width", type=int , default = 400 )
-parser.add_argument("--model_name", type = str , default = "")
-parser.add_argument("--n_classes", type=int )
+from models import FCN8, resnet_aspp, vgg16_aspp
+import config
 
-args = parser.parse_args()
+if not config.use_gpu:
+	os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
+	os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
-n_classes = args.n_classes
-model_name = args.model_name
-images_path = args.test_images
-input_width =  args.input_width
-input_height = args.input_height
-epoch_number = args.epoch_number
+n_classes = config.n_classes
+model_name = config.model_name
+images_path = config.test_images
+input_width =  config.input_width
+input_height = config.input_height
 print('666')
 # modelFns = { 'vgg_segnet':Models.VGGSegnet.VGGSegnet , 'vgg_unet':Models.VGGUnet.VGGUnet , 'vgg_unet2':Models.VGGUnet.VGGUnet2 , 'fcn8':Models.FCN8.FCN8 , 'fcn32':Models.FCN32.FCN32   }
 # modelFN = FCN8.FCN8
 # modelFN = FCN_Atrous.FCN8_Atrous
 # modelFN = deeplabv3.deeplabv3_plus
-modelFN = deeplabv2_resnet.deeplabv2_resnet
+modelFNs = {'fcn8':FCN8.FCN8, 'vgg16_aspp':vgg16_aspp.vgg16_aspp, 'resnet_aspp':resnet_aspp.resnet_aspp}
+
+if model_name not in modelFNs:
+	print('please choose model name from {fcn8, vgg16_aspp, resnet_aspp}')
+	exit(0)
+
+modelFN = modelFNs[model_name]
 m = modelFN( n_classes , input_height=input_height, input_width=input_width   )
-m.load_weights(  args.save_weights_path + "." + str(  epoch_number )  )
+m.load_weights(  config.save_weights_path + config.test_model_name  )
 # m.compile(loss='categorical_crossentropy',
 #       optimizer= 'adadelta' ,
 #       metrics=['accuracy'])
@@ -54,8 +48,8 @@ images.sort()
 # colors = [  ( random.randint(0,255),random.randint(0,255),random.randint(0,255)   ) for _ in range(n_classes)  ]
 colors=[(0,0,0),(255,255,255)]
 for imgName in images:
-	outName = imgName.replace( images_path ,  args.output_path )
-	X = LoadBatches.getImageArr(imgName , args.input_width  , args.input_height  )
+	outName = imgName.replace( images_path ,  config.output_path )
+	X = LoadBatches.getImageArr(imgName , config.input_width  , config.input_height  )
 	start = time.time()
 	pr = m.predict( np.array([X]) )[0]
 	end = time.time()

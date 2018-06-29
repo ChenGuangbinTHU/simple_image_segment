@@ -104,9 +104,9 @@ def resnet_18_output(inputs, layers_num):
     for i in range(0, 4):
         for j in range(layers_num[i]):
             if i < 2:
-                o = bottleneck_block(o, 16*2**i, i == 1 and j == 0,not j == 0)
+                o = basic_block(o, 8*2**i, i == 1 and j == 0,not j == 0)
             else:
-                o = dilated_bottleneck_block(o, 16*2**i, 2, i == 1 and j == 0,not j == 0)
+                o = dilated_basic_block(o, 8*2**i, 2, i == 1 and j == 0,not j == 0)
     return o
 
 if __name__ == '__main__':

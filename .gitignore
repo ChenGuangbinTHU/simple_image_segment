@@ -25,3 +25,4 @@ result/
 .DS_Store
 tmp/
 aug_data/
+.vscode/

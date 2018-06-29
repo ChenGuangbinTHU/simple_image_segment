@@ -1,0 +1,6 @@
+numpy
+opencv-python
+keras-gpu
+pillow
+glob
+itertools

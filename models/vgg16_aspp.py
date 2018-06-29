@@ -23,7 +23,7 @@ VGG_Weights_path = file_path+"/data/vgg16_weights_th_dim_ordering_th_kernels.h5"
 IMAGE_ORDERING = 'channels_first' 
 
 
-def FCN8_Atrous( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
+def vgg16_aspp( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 
 	# assert input_height%32 == 0
 	# assert input_width%32 == 0
