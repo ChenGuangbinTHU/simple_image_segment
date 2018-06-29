@@ -26,7 +26,7 @@ visulize_image_path = 'result/'
 
 show_iou = True
 
-for i in [save_model_path, train_images, train_annotations, val_images, val_annotations, test_images, test_annotations, output_path,  visulize_image_path]:
+for i in [save_weights_path, train_images, train_annotations, val_images, val_annotations, test_images, test_annotations, output_path,  visulize_image_path]:
     import os
     if not os.path.exists(i):
         os.mkdir(i)
