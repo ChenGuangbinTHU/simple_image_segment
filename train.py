@@ -5,7 +5,6 @@ import numpy as np
 from keras.callbacks import ModelCheckpoint,TensorBoard
 from keras.layers import *
 from keras import metrics
-import metrics
 from keras import backend as K
 import tensorflow as tf
 import config
