@@ -42,9 +42,7 @@ def miou(predict, ground_truth):
 	return ans
 	# print(predict)
 
-if __name__ == '__main__':
-	g_folder = 'new_sheep_val_seg/'
-	p_folder = 'predict_target/'
+def main(g_folder, p_folder):
 	p_files = os.listdir(p_folder)
 	g_files = os.listdir(g_folder)
 	p_files.sort()
@@ -59,3 +57,5 @@ if __name__ == '__main__':
 	print(min(a))
 	print(max(a))
 	print(sum(a)/len(a))
+
+	

@@ -9,6 +9,8 @@ import time
 import os
 from models import FCN8, resnet_aspp, vgg16_aspp
 import config
+import result_visulize
+import miou
 
 if not config.use_gpu:
 	os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"   # see issue #152
@@ -69,3 +71,10 @@ for imgName in images:
 	cv2.imwrite(  outName , seg_img )
 	
 
+if config.visulize:
+	print('result visulization')
+	result_visulize.main(config.test_images, config.output_path, config.visulize_image_path)
+
+if config.show_iou:
+	print('calculate iou')
+	miou.main(config.test_annotations, config.output_path)
