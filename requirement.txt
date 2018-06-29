@@ -3,5 +3,3 @@ opencv-python
 tensorflow-gpu
 keras
 pillow
-glob
-itertools
