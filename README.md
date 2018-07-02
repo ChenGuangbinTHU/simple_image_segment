@@ -2,6 +2,9 @@
 
 simply implement image segmentation for my own project(extracting sheep from iamge) , mainly reference deeplab series and fcn(fully conv network)
 
+## experiment environment
+ubuntu 17.04 + keras + cuda9 + cudnn7
+
 ## how to use
 
 1. clone this responsity to local
