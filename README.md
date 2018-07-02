@@ -1,6 +1,6 @@
-#README
+# README
 
-## simply implement image segmentation for my own project(extracting sheep from iamge) , mainly reference deeplab series and fcn(fully conv network)
+simply implement image segmentation for my own project(extracting sheep from iamge) , mainly reference deeplab series and fcn(fully conv network)
 
 ## how to use
 
