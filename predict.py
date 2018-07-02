@@ -21,11 +21,7 @@ model_name = config.model_name
 images_path = config.test_images
 input_width =  config.input_width
 input_height = config.input_height
-print('666')
-# modelFns = { 'vgg_segnet':Models.VGGSegnet.VGGSegnet , 'vgg_unet':Models.VGGUnet.VGGUnet , 'vgg_unet2':Models.VGGUnet.VGGUnet2 , 'fcn8':Models.FCN8.FCN8 , 'fcn32':Models.FCN32.FCN32   }
-# modelFN = FCN8.FCN8
-# modelFN = FCN_Atrous.FCN8_Atrous
-# modelFN = deeplabv3.deeplabv3_plus
+
 modelFNs = {'fcn8':FCN8.FCN8, 'vgg16_aspp':vgg16_aspp.vgg16_aspp, 'resnet_aspp':resnet_aspp.resnet_aspp}
 
 if model_name not in modelFNs:

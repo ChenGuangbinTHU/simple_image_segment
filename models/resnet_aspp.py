@@ -30,7 +30,6 @@ def resnet_aspp( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	# assert input_height%32 == 0
 	# assert input_width%32 == 0
 
-	# https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg16_weights_th_dim_ordering_th_kernels.h5
 	img_input = Input(shape=(3,input_height,input_width))
 	p5 = resnet_keras.resnet_18_output(img_input, [2, 2, 2,2])
 	# branching for Atrous Spatial Pyramid Pooling
@@ -39,7 +38,7 @@ def resnet_aspp( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	n = 36
 	b1 = Conv2D(10, (3, 3), padding='same',dilation_rate=(n, n), activation='relu', name='fc6_1', data_format=IMAGE_ORDERING)(p5)
 	b1 = Dropout(0.5)(b1)
-	# b1 = Conv2D(64, (1, 1), activation='relu', name='fc7_1', data_format=IMAGE_ORDERING)(b1)
+	# b1 = Conv2D(10, (1, 1), activation='relu', name='fc7_1', data_format=IMAGE_ORDERING)(b1)
 	# b1 = Dropout(0.5)(b1)
 	# b1 = Conv2D(2, (1, 1), activation='relu', name='fc8_voc12_1', data_format=IMAGE_ORDERING)(b1)
 
@@ -47,7 +46,7 @@ def resnet_aspp( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	# b2 = ZeroPadding2D(padding=(12, 12))(p5)
 	b2 = Conv2D(10, (3, 3), padding='same',dilation_rate=(n*2, n*2), activation='relu', name='fc6_2', data_format=IMAGE_ORDERING)(p5)
 	b2 = Dropout(0.5)(b2)
-	# b2 = Conv2D(64, (1, 1), activation='relu', name='fc7_2', data_format=IMAGE_ORDERING)(b2)
+	# b2 = Conv2D(10, (1, 1), activation='relu', name='fc7_2', data_format=IMAGE_ORDERING)(b2)
 	# b2 = Dropout(0.5)(b2)
 	# b2 = Conv2D(2, (1, 1), activation='relu', name='fc8_voc12_2', data_format=IMAGE_ORDERING)(b2)
 
@@ -55,7 +54,7 @@ def resnet_aspp( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	# b3 = ZeroPadding2D(padding=(18, 18))(p5)
 	b3 = Conv2D(10, (3, 3), padding='same',dilation_rate=(n*3, n*3), activation='relu', name='fc6_3', data_format=IMAGE_ORDERING)(p5)
 	b3 = Dropout(0.5)(b3)
-	# b3 = Conv2D(64, (1, 1), activation='relu', name='fc7_3', data_format=IMAGE_ORDERING)(b3)
+	# b3 = Conv2D(10, (1, 1), activation='relu', name='fc7_3', data_format=IMAGE_ORDERING)(b3)
 	# b3 = Dropout(0.5)(b3)
 	# b3 = Conv2D(2, (1, 1), activation='relu', name='fc8_voc12_3', data_format=IMAGE_ORDERING)(b3)
 
@@ -63,7 +62,7 @@ def resnet_aspp( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	# b4 = ZeroPadding2D(padding=(24, 24))(p5)
 	b4 = Conv2D(10, (3, 3), padding='same',dilation_rate=(n*4, n*4), activation='relu', name='fc6_4', data_format=IMAGE_ORDERING)(p5)
 	b4 = Dropout(0.5)(b4)
-	# b4 = Conv2D(64, (1, 1), activation='relu', name='fc7_4', data_format=IMAGE_ORDERING)(b4)
+	# b4 = Conv2D(10, (1, 1), activation='relu', name='fc7_4', data_format=IMAGE_ORDERING)(b4)
 	# b4 = Dropout(0.5)(b4)
 	# b4 = Conv2D(2, (1, 1), activation='relu', name='fc8_voc12_4', data_format=IMAGE_ORDERING)(b4)
 	

@@ -85,7 +85,7 @@ def get_x_and_y(img_path, seg_path, n_classes, input_height, input_width, output
 		y.append( getSegmentationArr( seg , n_classes , output_width , output_height )  )
 
 	return np.array(x), np.array(y)
-
+'''
 def imageSegmentationGenerator( images_path , segs_path ,  batch_size,  n_classes , input_height , input_width , output_height , output_width   ):
 	
 	assert images_path[-1] == '/'
@@ -122,41 +122,6 @@ def imageSegmentationGenerator( images_path , segs_path ,  batch_size,  n_classe
 			Y.append( getSegmentationArr( seg , n_classes , output_width , output_height )  )
 		# print(1)
 		yield np.array(X) , np.array(Y)
-
-def visulize(img, mask):
-		
-	# print(shape)
-	# mask = mask.resize((shape[0],shape[0]))
-	# mask = mask.reshape((400, 400, 2))
-	# img = img.transpose([1,2,0])
-	# mask = mask.transpose([2,0,1])
-	# shape = np.array(img).shape
-	print(img.shape)
-	print(mask.shape)
-	# print(mask)
-	# print(img)
-	mask = np.array(mask)
-	
-	# mask = np.lib.pad(mask, ((0,0),(400,shape[1]-shape[0]-400)), 'constant', constant_values=(0, 0))
-	mask = Image.fromarray(mask)
-	img = Image.fromarray(img)
-	mask_data = mask.getdata()
-	a = img.getdata()
-	img = img.convert('RGBA')
-	l = list()
-	for i,j in zip(mask_data,a):
-	# print(i)
-		if i == 1:
-			l.append(( 255, j[1], j[2], 150))
-		else:
-			l.append((j[0], j[1], j[2], 255))
-	img.putdata(l)
-	img.show()
-
+'''
 if __name__ == '__main__':
-	# get_x_and_y('new_sheep_image/', 'new_sheep_seg/', 'exception_train', 2, 2, 2, 2, 2)
-	# a, b, c = get_x_and_y('new_sheep_image/', 'new_sheep_seg/', 'exception_train', 2, 400, 400,400, 400)
-	# for i,j in zip(a,b):
-	# 	visulize(i,j)
 	getSegmentationArr('aug_data/train/y/01.png', 2, 600, 600)
-	# getSegmentationArr('aug_data/train/y/next_gen_0_0_456.jpeg', 2, 600, 600)

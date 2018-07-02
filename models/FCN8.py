@@ -50,7 +50,6 @@ def FCN8( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	# assert input_height%32 == 0
 	# assert input_width%32 == 0
 
-	# https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg16_weights_th_dim_ordering_th_kernels.h5
 	img_input = Input(shape=(3,input_height,input_width))
 
 	x = Conv2D(8, (3, 3), activation='relu', padding='same', name='block1_conv1', data_format=IMAGE_ORDERING )(img_input)
@@ -96,7 +95,6 @@ def FCN8( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	x = Dense( 250 , activation='softmax', name='predictions')(x)
 
 	vgg  = Model(  img_input , x  )
-	# vgg.load_weights(VGG_Weights_path)
 
 	o = f5
 
@@ -124,25 +122,9 @@ def FCN8( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 
 	o = Conv2DTranspose( nClasses , kernel_size=(16,16) ,  strides=(8,8) , use_bias=False, data_format=IMAGE_ORDERING )(o)
 	print(o.shape)
-	# print(o.shape)
 	upscore = Cropping2D(((4, 4), (4, 4)))(Permute((2,3,1))(o))
-	# print(upscore)
-	# print(tf.transpose(o,(0,2,3,1)).shape)
-	# print(img_input.shape)
-	# print(upscore.shape)
-	# exit(0)
-	# o = CrfRnnLayer(image_dims=(input_height, input_width),
-    #                      num_classes=nClasses,
-    #                      theta_alpha=160.,
-    #                      theta_beta=3.,
-    #                      theta_gamma=3.,
-    #                      num_iterations=10,
-    #                      name='crfrnn')([upscore, Permute((2,3,1))(img_input)])
-	# o = Permute((3,1,2))(o)
 
 	o_shape = Model(img_input ,  o).output_shape
-	# print(o_shape)
-	# exit(0)
 	outputHeight = o_shape[2]
 	outputWidth = o_shape[3]
 
@@ -151,12 +133,8 @@ def FCN8( nClasses ,  input_height=416, input_width=608 , vgg_level=3):
 	o = (Activation('softmax'))(o)
 
 	model = Model( img_input , o )
-	# print(model.output_shape)
-	# print(model.shape)
 	model.outputWidth = outputWidth
 	model.outputHeight = outputHeight
-	# model.summary()
-	# exit(0)
 	return model
 
 

@@ -1,6 +1,12 @@
-train:
-python train.py --save_weights_path='w/'  --train_images='new_sheep_image/' --train_annotations='new_sheep_seg/' --n_classes=2  --model_name='fcn8' --val_images='new_sheep_val_image/' --val_annotations='new_sheep_val_seg/' --epochs=100
+#README
 
-predict:
-python predict.py --save_weights_path='w/' --epoch_number=0 --test_images='new_sheep_val_image/' --output_path='predict_target/' --n_classes=2  --model_name='FCN8'
+## simply implement image segmentation for my own project(extracting sheep from iamge) , mainly reference deeplab series and fcn(fully conv network)
 
+## how to use
+
+1. clone this responsity to local
+2. cd simple_image_segment
+3. pip install -r requirement.txt (this will autoly install tensorflow **gpu** version)
+4. modify config.py based on your own need
+5. python train.py
+6. python predict.py
